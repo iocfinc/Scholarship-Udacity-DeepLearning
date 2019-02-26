@@ -370,7 +370,7 @@ OBJECTIVES FOR THIS WEEK (21-30):
 
 * [x] :dart: Complete the autoencoder paper on "Seeing in the Dark"
 * [x] :dart: Re-read "jobs in Deep Learning" section for better targeting and updates on the LinkedIn page.
-* [ ] :dart: Complete the Recurrent Neural Network stragglers: **"Implementation of RNN&LSTM, Embeddings,Sentiment Analysis, Attention"**
+* [x] :dart: Complete the Recurrent Neural Network stragglers: **"Implementation of RNN&LSTM, Embeddings,Sentiment Analysis, Attention"**
 * [ ] :dart: Update experiences and projects in LinkedIn Pages.
 
 >I might have made a mistake in my understanding of embedding. The input is still the entire vocabulary, similar to one-hot. The embedding is what we can change the dimensions of. So what we get is the weights of the hidden layer which is the embedding. After we have the weights, we can actually validate our data by providing the **cosine similarity** between the words. In this case cosine similarity is simply measuring how close or opposite two words are (in the data set) based on their relative vectors towards each other. -- **Deprecated**
@@ -385,8 +385,13 @@ One important thing to note here is that the original text corpus plays a very i
 
 Now on to the lesson, the next one is on *Negative Sampling*. The authors of Word2Vec actually addressed the problem of training a huge Neural Network by releasing another paper. Their first suggestion was to use subsampling which we have discussed yesterday where the more frequent words have a higher chance of being removed from the vocabulary. Another improvement they did was to introduce the concept of negative sampling. When we look at the output target only 1 target word should have a value of 1 and the remaining words zero this is similar to one-hot encoding where our output is simply the length of the vocabulary. If we were to use backpropagation on the entire vocabulary output length then we would be having millions of weight to update (assuming we have 100 vocabulary words and 1000 neurons on the embedding layer). Since only one target word is going to have to be one only a few of the neurons need to be updated dramatically but we still have to back propagate the entire neuron network. With Negative Sampling we simply choose a few words to represent the incorrect answers and perform the weight updates only on the target word and the negative samples. Note also that the negative sampling is referring to the fact that we are sampling only a few of the negative words together with our target positive word. [Here is an article with a simple explanation of what Negative Sampling is](http://mccormickml.com/2017/01/11/word2vec-tutorial-part-2-negative-sampling/). In the paper, it there is also a suggestion on how much words we sample. For big data sets we can get away with 5 words. For smaller datasets we have to get anywhere within 5-20 samples.
 
-How do we select which samples are in Negative Sampling?
+How do we select which samples are in Negative Sampling? The negative samples are chosen from a "Unigram Distribution", where more frequent words are more likely to be selected.
 
+```math
+P(w')
+```
+
+To round out the word2vec topic here is a [post](http://mccormickml.com/2018/06/15/applying-word2vec-to-recommenders-and-advertising/) from mccormick ML about some applications of Word2Vec on advertising and recommenders
 References:
 
 McCormick, C. (2016, April 19). Word2Vec Tutorial - The Skip-Gram Model. Retrieved from http://www.mccormickml.com
