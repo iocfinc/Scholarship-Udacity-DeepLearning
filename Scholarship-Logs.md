@@ -400,6 +400,8 @@ OBJECTIVES FOR THIS WEEK (21-30):
 
 To round out the word2vec topic here is a [post](http://mccormickml.com/2018/06/15/applying-word2vec-to-recommenders-and-advertising/) from mccormick ML about some applications of Word2Vec on advertising and recommenders.
 
+Moving on we move to the topic of attention in Deep Learning.
+
 References:
 
 McCormick, C. (2016, April 19). Word2Vec Tutorial - The Skip-Gram Model. Retrieved from http://www.mccormickml.com
