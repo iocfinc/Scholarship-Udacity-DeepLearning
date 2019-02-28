@@ -405,3 +405,14 @@ Moving on we move to the topic of attention in Deep Learning.
 References:
 
 McCormick, C. (2016, April 19). Word2Vec Tutorial - The Skip-Gram Model. Retrieved from http://www.mccormickml.com
+
+## Day 29 February 28,2019
+
+OBJECTIVES FOR THIS WEEK (21-30):
+
+* [x] :dart: Complete the autoencoder paper on "Seeing in the Dark"
+* [x] :dart: Re-read "jobs in Deep Learning" section for better targeting and updates on the LinkedIn page.
+* [x] :dart: Complete the Recurrent Neural Network stragglers: **"Implementation of RNN&LSTM, Embeddings,Sentiment Analysis, Attention"**
+* [ ] :dart: Update experiences and projects in LinkedIn Pages.
+
+First off I'm applying to some possible offerings in ML/DL. 
