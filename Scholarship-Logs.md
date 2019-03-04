@@ -406,7 +406,7 @@ References:
 
 McCormick, C. (2016, April 19). Word2Vec Tutorial - The Skip-Gram Model. Retrieved from http://www.mccormickml.com
 
-## Day 29 February 28,2019
+## Day 33 March 4,2019
 
 OBJECTIVES FOR THIS WEEK (21-30):
 
@@ -415,4 +415,44 @@ OBJECTIVES FOR THIS WEEK (21-30):
 * [x] :dart: Complete the Recurrent Neural Network stragglers: **"Implementation of RNN&LSTM, Embeddings,Sentiment Analysis, Attention"**
 * [ ] :dart: Update experiences and projects in LinkedIn Pages.
 
-First off I'm applying to some possible offerings in ML/DL. 
+First off I'm applying to some possible offerings in ML/DL. Also, finished attention finally. I did some other applications in ML/DL hopefully I get some callbacks. Right now, since I am a bit behind, my goal would be to move towards AWS deployment with SageMaker. Model Deployment for this week. Build and deploy to production. Learn a few techniques on how to do it.
+
+Its Day 33, and its March. 65 Days to go. I am excited to be out and free again. Pursuing what I would like to do. Hopefully I get to build things and be happier than right now. That's all we could ever ask for really, right? :smirk:
+
+OBJECTIVES FOR THIS WEEK (33-40):
+
+* [ ] :gem: Update experiences and projects in LinkedIn Pages.
+* [ ] :gem: Finish *Introduction to Deployment*
+* [ ] :gem: Finish *Building a Model with Sagemaker*
+* [ ] :gem: Proceed to *Deploying and Building a Model*
+* [ ] :gem: Follow that with *Hyperparameter Tuning*
+* [ ] :gem: Lastly *Updating a model*
+* [ ] :bomb: All leading up to **Deploying a Sentiment Analysis Model**
+
+Here is an interesting article on [pricing algorithms learning to collude](https://www.popularmechanics.com/technology/robots/a26309827/left-to-their-own-devices-pricing-algorithms-resort-to-collusion/). The article is based on [this study](https://voxeu.org/article/artificial-intelligence-algorithmic-pricing-and-collusion) and it shows that AI price setting algorithms can and will collude to get the best possible outcome at the expense of the consumer. The study was about the effects of Reinforcement Learning Agents learning to agree to a certain price for a product hinting on collusion between the two. The problem that this highlights is that the AI is now able to learn how to fix prices so that they can make the most sales which hurts the consumers. The idea here is that the agents in the controlled environment showed signs that they were able to learn the basics of capitalism and learned how to maximize their profits. This is one way to look at it. The other thing that I can see here is that the agents can actually learn to interact with each other without any interface between them and just observing the environment. That would be great if we can transfer that to self-driving cars and later to other applications as well. Imagine when your car learns how to actually maximize the road through sharing? That would be great right?
+
+Here is another article about [predictive maintenance using Big Data](https://www.popularmechanics.com/military/aviation/a25995189/big-data-saves-warplanes/). What the article writes was that the US Air Force had mined the data from their older planes and from this data created machine learning applications on preventive maintenance. They were actually getting the data from various critical value components like the engines, the landing gear and input it to their machine learning model. The model would then flag components that might be due to fail or are no longer running at an acceptable level and alert the maintenance crew to check them. This initiative comes from the successive failures in components that plagued the aircraft some of which has led to loss of life. The source from the air force said that they intend to develop this initiative and proceed to applying it to their fighter fleet which is huge and very active.
+
+## Day 34 March 5,2019
+
+OBJECTIVES FOR THIS WEEK (33-40):
+
+* [ ] :gem: Update experiences and projects in LinkedIn Pages.
+* [ ] :gem: Finish *Introduction to Deployment*
+* [ ] :gem: Finish *Building a Model with Sagemaker*
+* [ ] :gem: Proceed to *Deploying and Building a Model*
+* [ ] :gem: Follow that with *Hyperparameter Tuning*
+* [ ] :gem: Lastly *Updating a model*
+* [ ] :bomb: All leading up to **Deploying a Sentiment Analysis Model**
+
+Now proceeding with Introduction to Deployment topic. First up we are given the problem that can be solved by Machine Learning, Boston housing prices. The idea is that we have to develop a model and deploy it to a cellphone app. The first discussion then transitions to the Machine Learning workflow. I am very excited to finish this topic. Previously, all I have done was simply train the model and test it. Now I can actually apply the models to real world applications and that for me is more important. So on to the Machine Learning Workflow.
+
+### Machine Learning Workflow
+
+The machine learning workflow is cyclical and therefore iterative as well. It starts from the gathering of data and goes through the modeling of a solution and finally proceeds to the deployment in the system. Generally, there are three distinct steps in the workflow: **Explore & Process Data**, **Modeling** and **Deployment**.
+
+#### Explore & Process the data
+
+#### Modeling
+
+#### Deployment
