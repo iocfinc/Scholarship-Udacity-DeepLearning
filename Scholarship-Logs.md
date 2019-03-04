@@ -449,10 +449,24 @@ Now proceeding with Introduction to Deployment topic. First up we are given the 
 
 ### Machine Learning Workflow
 
-The machine learning workflow is cyclical and therefore iterative as well. It starts from the gathering of data and goes through the modeling of a solution and finally proceeds to the deployment in the system. Generally, there are three distinct steps in the workflow: **Explore & Process Data**, **Modeling** and **Deployment**.
+The machine learning workflow is cyclical and therefore iterative as well. It starts from the gathering of data and goes through the modeling of a solution and finally proceeds to the deployment in the system. Generally, there are three distinct steps in the workflow: **Explore & Process Data**, **Modeling** and **Deployment**. In this example we are asked to work on a Kaggle Dataset. So we go over the workflow in details below.
 
 #### Explore & Process the data
 
+First thing to do is to Explore and Process the data for the given problem. This section would include **Retrieval of Data**, **Clean and Explore** and **Prepare and Transform**. For the example of a Kaggle Dataset, data retrieval is simple, we have to go to Kaggle and download the dataset directly. There are other ways to do this like web scraping and using other data sources/repository. Once the data is retrieved, we can proceed with cleaning the data and data exploration. In this step we would be able to plot the data and see if there would be missing values in the data set and if there are outliers that need to be handled. It would also help if we can explore the data so that we can get an idea of what model might work best. Last step for this section is to prepare and transform data. This would include normalizing the data set values and splitting the data set into the training, validation and testing subsets.
+
 #### Modeling
 
+Once we have prepared our data we can then proceed with creating out model to train. We can have multiple models which we can train. The idea should be that we will choose the model that provides the best result in our given problem. In the modeling section we are going to run training on the model and we also get to validate the model for losses and accuracy. Once we have trained our model we can then perform the testing using the test data set to get the performance metrics of our model.
+
 #### Deployment
+
+The focus of this lesson and the rest of the nanodegree would be in this section, Deployment. In this example we are going to use our model in a mobile app. This section would include how we are going to use the trained model into an application and also on how to account for changes in the data or on updating the model with the new data.
+
+There are different samples of workflow available from the different vendors of ML solutions, we have one from AWS, another from Azure and also one from GCP. The links to their Workflow are below:
+
+https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works-mlconcepts.html
+https://docs.microsoft.com/en-us/azure/machine-learning/service/overview-what-is-azure-ml
+https://cloud.google.com/ml-engine/docs/tensorflow/ml-solutions-overview
+
+We are now done with the Workflow of a machine learning project, we then move to Cloud computing.
