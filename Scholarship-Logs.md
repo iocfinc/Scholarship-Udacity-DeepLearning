@@ -506,3 +506,31 @@ This is the most common method used in deployment of a model into production. Th
 ![Udacity - Machine learning workflow and DevOps](https://s3.amazonaws.com/video.udacity-data.com/topher/2018/November/5bea5c84_mlworkflow-devops-1/mlworkflow-devops-1.png)
 
 As we can see in the workflow much of Explore and Process Data section as well as Modeling are closely related to each other. The deployment section is also seen as a standalone section that is distinct in objective from the other section. As distinctly identified in the workflow DevOps model above, we can clearly see where development in the Machine Learning workflow happens and where the Operations portion of the Machine Learning workflow happens. In this context, those that are involved in Development are commonly referred to as Analysts while those that handle operations are usually software developers. This line separating the duties of Development and Operations are now more blurred and there can be instances where the analyst can transition to a software developer and vice versa. This is aided by the use containers, endpoints and APIs. With the softening of the division between operations and development allows analysts to handle certain aspects of deployment and enable faster updates to models.
+
+### Endpoints & REST APIs
+
+The **Endpoint** is the interface to the model. This interface will facilitate the communication between the model and the application. It will take in the input data sent by the user through the application. It also serves as the receiver for the prediction result of the model that would be sent back to the user after getting the data. Below is a sample breakdown of code that shows the interaction between the endpoint, the application and the model.
+
+![Udacity - Endpoint Breakdown](https://s3.amazonaws.com/video.udacity-data.com/topher/2018/November/5bea640c_endpointprogram-2/endpointprogram-2.png)
+
+In the example above, the endpoint is line `predictions = ml_model(input_user_data)`. In this case the the input interface for the endpoint is via the `input_user_data` argument. The model in this case is the `ml_model` function call. The output for the model, which is also part of the endpoint, is then going to be stored in `predictions`. In this case, the entire Python script is the application.
+
+Communication between the application, by extension the user, and the machine learning model will therefore be under the control of the endpoint since it acts as the interface between the two components. In this case the endpoint is considered as an Application Programming Interface (API). Note that APIs are not just about machine learning models, they can also used to process data, or do another task. The idea is that the API will take in the data, will do the operation inside that API and output the result of action back to the application. An easy way to think of an **API** is a set of rules that enable programs, the application and the model in this case, to communicate with each other. In this context, our API is using the Representational State Transfer, **REST*, architecture. REST provides a framework for the set of rules and constraints that must be adhered to for communication between the two programs. This REST API is one that uses HTTP Requests and responses to enable communcation between the application and the model through the endpoint.
+
+The HTTP request sent from the application to the model (note that only the application can use the request) is composed of four parts:
+
+* Endpoint - which is in the form of a URL, Uniform Resource Locator, or the web address.
+* HTTP Method - there are various HTTP methods that can be used for example *get*,*post*, *put*, *delete*. In the case of deployment our application will use the *POST* method only.
+* HTTP Headers - this contains additional information regarding the message, like the data format expected in the message. These information are placed in the headers to be passed to the receiving program.
+* Message (Data or Body) - This is the final part of the entire message. For deployment purposes, this will contain the user's data which would be used as input for the model.
+
+The HTTP response sent from the model to the application (only the model will respond) is composed of three parts:
+
+* HTTP Status Code - this is the status of the last message received from the application. If the message was successfully sent and the data was received the status code would start with a *2*, like 200.
+* HTTP Headers - again, this contains the additional data regarding the message in the response. This would therefore include the format of the data that is sent back to the receiver.
+* Message - this is going to contain the data that was returned from the model. So in our case this will be the predictions result.
+
+The prediction from the user's input data is then presented back to the user via the application. The endpoint is the interface that enables the communication between the application and the model using a REST API. In the future we will learn to use RESTful API and we will come to realize that the application's responsibility would be the following:
+
+* Format the user's data in a way that can be placed in the HTTP request message and be usable on the model's end.
+* Translate the HTTP response message of the prediction in a way that is readable/understandable for the end user.
