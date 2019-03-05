@@ -478,3 +478,31 @@ There are many benefits of using Cloud computing. One good example is in capacit
 Obviously there are many benefits that can be gained from using Cloud Computing services aside from Costs. But there are also risks when using cloud services. This is usually not highlighted by providers but some examples would be security, oversight and governance, portability(migration).
 
 In terms of machine learning context, cloud computing is usually used for deployment of the model. But that does not mean that Cloud computing is not used on other parts of the machine learning workflow. For example, the training portion could benefit from additional computing power of cloud based computers. This is especially true for larger and complex datasets. As such, there are also services being sold by the cloud providers to cater to the need for virtual machines and instances.
+
+Machine learning applications would represent the deployment of the model. So far, we have only made models and trained them in this course. We were more focused on the theory behind the models. In the succeeding lessons we would be diving into how we can make services out of these models. First up is we define what we mean by deployment, or deployment to production. Simply put, deployment to production means that our machine learning model is integrated into an existing production environment so that the model can be used to make decisions or predictions based upon data input to the model. In the next discussions we are going to assume that the machine learning model was developed using Python.
+
+Now that we have a working model we want to deploy the next question would be in what way can we deploy these model, from a modelling component to the deployment component. In Udacity's notes there are *three* primary methods to transfer the model.
+
+1. Python model is *recoded* into the programming language of the production environment.
+2. Model is coded in *Predictive Model Markup Language (PMML)* or *Portable Format Analytics(PFA)*.
+3. Python model is *converted* into a format that can be used in the production environment.
+
+The methods above are also arranged by how common they are in usage. Method 3 is similar to the way a model is deployed for Amazon SageMaker. We now go slightly deeper into the methods.
+
+**Recoding Model into Programming language of Production environment**
+
+This methods involves recoding the trained model in Python into the language used in Prod. This could often be in Java or C++. This method is now rarely used since it takes time to recode a model, train and test and achieve the same prediction as the original Python model had.
+
+**Model coded in PMML or PFA**
+
+In this method the model is coded in Predictive Model Markup Language (PMML) or Portable Format for Analytics (PFA), The two are complementary standards and aim to simplify moving predictive models into the production environment. Both language are developed by the Data Mining Group to provide vendor-neutral executable model specifications for certain predictive models used in data mining and machine learning.
+
+**Model is converted into Format that is used in the Production Environment**
+
+This is the most common method used in deployment of a model into production. The Python model that has been created is then converted into code that can be used in the production environment usually through the use of libraries and methods. Most popular machine learning frameworks like PyTorch and TensorFlow have methods that will convert the Python models into intermediate standard format like ONNX (Open Neural Network Exchange format). This intermediate standard format can then be converted into the software native to the production environment. There are also technologies like containers, endpoints and APIs (Application Programming Interfaces) that can help ease the work required for deploying a model into the production environment.
+
+### Machine Learning Workflow and DevOps
+
+![Udacity - Machine learning workflow and DevOps](https://s3.amazonaws.com/video.udacity-data.com/topher/2018/November/5bea5c84_mlworkflow-devops-1/mlworkflow-devops-1.png)
+
+As we can see in the workflow much of Explore and Process Data section as well as Modeling are closely related to each other. The deployment section is also seen as a standalone section that is distinct in objective from the other section. As distinctly identified in the workflow DevOps model above, we can clearly see where development in the Machine Learning workflow happens and where the Operations portion of the Machine Learning workflow happens. In this context, those that are involved in Development are commonly referred to as Analysts while those that handle operations are usually software developers. This line separating the duties of Development and Operations are now more blurred and there can be instances where the analyst can transition to a software developer and vice versa. This is aided by the use containers, endpoints and APIs. With the softening of the division between operations and development allows analysts to handle certain aspects of deployment and enable faster updates to models.
