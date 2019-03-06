@@ -515,7 +515,7 @@ The **Endpoint** is the interface to the model. This interface will facilitate t
 
 In the example above, the endpoint is line `predictions = ml_model(input_user_data)`. In this case the the input interface for the endpoint is via the `input_user_data` argument. The model in this case is the `ml_model` function call. The output for the model, which is also part of the endpoint, is then going to be stored in `predictions`. In this case, the entire Python script is the application.
 
-Communication between the application, by extension the user, and the machine learning model will therefore be under the control of the endpoint since it acts as the interface between the two components. In this case the endpoint is considered as an Application Programming Interface (API). Note that APIs are not just about machine learning models, they can also used to process data, or do another task. The idea is that the API will take in the data, will do the operation inside that API and output the result of action back to the application. An easy way to think of an **API** is a set of rules that enable programs, the application and the model in this case, to communicate with each other. In this context, our API is using the Representational State Transfer, **REST*, architecture. REST provides a framework for the set of rules and constraints that must be adhered to for communication between the two programs. This REST API is one that uses HTTP Requests and responses to enable communcation between the application and the model through the endpoint.
+Communication between the application, by extension the user, and the machine learning model will therefore be under the control of the endpoint since it acts as the interface between the two components. In this case the endpoint is considered as an Application Programming Interface (API). Note that APIs are not just about machine learning models, they can also used to process data, or do another task. The idea is that the API will take in the data, will do the operation inside that API and output the result of action back to the application. An easy way to think of an **API** is a set of rules that enable programs, the application and the model in this case, to communicate with each other. In this context, our API is using the Representational State Transfer, **REST*, architecture. REST provides a framework for the set of rules and constraints that must be adhered to for communication between the two programs. This REST API is one that uses HTTP Requests and responses to enable communication between the application and the model through the endpoint.
 
 The HTTP request sent from the application to the model (note that only the application can use the request) is composed of four parts:
 
@@ -534,3 +534,38 @@ The prediction from the user's input data is then presented back to the user via
 
 * Format the user's data in a way that can be placed in the HTTP request message and be usable on the model's end.
 * Translate the HTTP response message of the prediction in a way that is readable/understandable for the end user.
+
+## Day 35 March 6,2019
+
+OBJECTIVES FOR THIS WEEK (33-40):
+
+* [ ] :gem: Update experiences and projects in LinkedIn Pages.
+* [ ] :gem: Finish *Introduction to Deployment*
+* [ ] :gem: Finish *Building a Model with Sagemaker*
+* [ ] :gem: Proceed to *Deploying and Building a Model*
+* [ ] :gem: Follow that with *Hyperparameter Tuning*
+* [ ] :gem: Lastly *Updating a model*
+* [ ] :bomb: All leading up to **Deploying a Sentiment Analysis Model**
+
+Now moving to **Containers**. We have previously discussed that the deployment usually has an *application* where the users can go to and a *model* that does takes in data from the users and outputs predictions based on the input. Managing the communication between the model and application is the *endpoint*. Both the model and application are programs and therefore require a computing environment setup for them to operate on. *Containers* is one way to create this environment and maintain it. Both model and application can be each run on a container computing environment. Containers are created via scripts that contains the setup of the environment which typically includes the software packages, libraries and other computing attributes that would be required to run the software application which in this case would be the model and application. *A container is a standardized collection of software that is used to run an application*. Think of it as a virtual environment we have in Anaconda where we only add dependencies based on the function of the application we have to write. This is similar in concept to the container. One common container software is Docker, and due to its commonality it is used interchangeably sometimes to refer to a container. **To be clear, containers are not full virtual machines.** They do not require the OS to be included only the software which means there is lower overhead to the computing resources. One good example of containers would be the workspaces in Udacity. The containers allow the developers to ensure that only relevant dependcies for the experiment are used. This means that they can update and fix issues on specific containers without it affecting possibly other workspaces. For example, if there is a bug in the workspace for auto-encoders then only the auto-encoders container needs to be edited.
+
+### Software container and Shipping container
+
+One way to think of the container is in the similarly named containers in shipping. The containers in shipping can carry different kinds of goods, bulk goods, dry goods, frozen food, live animals, cars etc. Even though the contents of the containers are not the same, they are standardized that they can be handled universally. There is a standard size for the containers and the tools required to operate and use them are also similar worldwide. The containers can be stacked since they have fixed sizes, they can be grabbed by cranes, the truck carrying doesn't change anywhere in the world because the sizes are standard. This is the same for the concept of containers/docker. The software they run inside them can do different things but one thing they have is that the tools used to operate them are the same and standardized. This makes it easier to transport and deploy the containers of software and interchange them between development and deployment.
+
+### Container structure
+
+The composition of a container is outlined with the image below. The bottom layer would be the computational infrastructure, which could be a cloud based sever, a local data center or a personal computer. The next layer would then be the operating system which is what is used to run the infrastructure. Above that would be the container engine, this would be Docker or Kubernetes etc. Basically they are the software installed on the Operating System that allows the management of the containers. On top of the container engine would then be the actual container where our application would reside. This would be made up of two parts. First would be the Bins/Libraries which are the softwares or dependencies that are required to run and manage the application we have. Finally we have the actual application itself which could be a web service or an app.
+
+![Udacity - Container Structure](https://s3.amazonaws.com/video.udacity-data.com/topher/2018/November/5bea67ba_container-1/container-1.png)
+
+### Advantages of Containers
+
+* 1. Increased security due to the isolation of individual applications
+* 2. Tailored dependencies/libraries ensure that only relevant software needed to run the application is running per container. This leads to efficient usage of computational resources.
+* 3. Ease of management of application lifecycle. Due to the modular approach of the containers it is easier to manage them through out their lifecycle. Containers allow easier creation, replication, deletion and maintenance.
+* 4. Containers make it simpler to replicate, save and share containers. Since containers can be created by following a script, this makes it easier to share the setup to others.
+
+Just to build on the fourth advantage, this is similar to the yaml file in anaconda. The file stores the current libraries installed in the environment which can then be used by others with anaconda to create the same environment on their end. The image below shows what information would be contained in the Container script. This could include the configuration of the software in the container as well as the versioning to ensure that the application can be run and allow others to receive the same environment and setup as the original environment.
+
+![Udactiy - Containers script file](https://s3.amazonaws.com/video.udacity-data.com/topher/2018/November/5bea67c6_container-2/container-2.png)
