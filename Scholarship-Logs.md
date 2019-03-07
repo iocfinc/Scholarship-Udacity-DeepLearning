@@ -583,11 +583,11 @@ Up next is *Building a Model using Sagemaker*. I am excited for this part, I hav
 OBJECTIVES FOR THIS WEEK (33-40):
 
 * [x] :gem: Finish *Introduction to Deployment*
-* [ ] :gem: Finish *Building a Model with Sagemaker*
+* [x] :gem: Finish *Building a Model with Sagemaker*
 * [ ] :gem: Proceed to *Deploying and Building a Model*
 * [ ] :gem: Follow that with *Hyperparameter Tuning*
 * [ ] :gem: Lastly *Updating a model*
-* [ ] :bomb: All leading up to **Deploying a Sentiment Analysis Model**
+* [ ] :bomb: All leading up to **Deploying a Sentiment Analysis Model** - CAPSTONE :bomb: :dart: :gem:
 * [ ] :gem: Update experiences and projects in LinkedIn Pages.
 
 ### Boston Housing Example
