@@ -576,4 +576,38 @@ For modeling, the characteristics are simply the hyperparameters of our model. T
 
 With that I have just completed *Introduction to Deployment*. I learned about the machine learning workflow, cloud computing, the advantages of cloud computing, Containers, the characteristics of Modeling and Deployment and also the different providers of cloud computing for Machine Learning. There are some additional notes on Cloud Computing that are optional in this sections so I would be circling back to it sometime after I finished all the submissions.
 
-Up next is *Building a Model using Sagemaker*. I am excited for this part, I have 100 USD credits courtesy of Amazon Educate. I have setup the instances, up next would be to create and clone the git repository for this section. Again, warning that 
+Up next is *Building a Model using Sagemaker*. I am excited for this part, I have 100 USD credits courtesy of Amazon Educate. I have setup the instances, up next would be to create and clone the git repository for this section. Again, warning that the pricing is based on the session time. If we fail to stop a session then the charges would continue to rack up.
+
+## Day 36 March 7,2019
+
+OBJECTIVES FOR THIS WEEK (33-40):
+
+* [x] :gem: Finish *Introduction to Deployment*
+* [ ] :gem: Finish *Building a Model with Sagemaker*
+* [ ] :gem: Proceed to *Deploying and Building a Model*
+* [ ] :gem: Follow that with *Hyperparameter Tuning*
+* [ ] :gem: Lastly *Updating a model*
+* [ ] :bomb: All leading up to **Deploying a Sentiment Analysis Model**
+* [ ] :gem: Update experiences and projects in LinkedIn Pages.
+
+### Boston Housing Example
+
+We are now on to examples for using Sagemaker. In this lesson we are going to be making an app that can predict the price for a house in Boston given some input data (features). Before we can get to doing that we first need to make sure that we cover some of the items in Sagemaker API.
+
+* Session - A session in Sagemaker is an object that will allow us to call additional functions built-in on the Sagemaker API. This allows management of interactions between the SageMaker API and other AWS services (S3 bucket for example).
+
+* Role - This is going to be the execution role that the logged in user would have, it is the *IAM* role that was created together with the notebook instance. This will define how the data that our notebook will use/create is stored.
+
+**S3** is a virtual storage solution provided by Amazon. This allows data to be written to it (dataset) and read from, think of it as the attached drive to our instance. This is going to handle data storage and transfer when using Amazon Services. S3 stands for *simple storage service*. When we upload a data to session, an S3 bucket would automatically get created based on the details in the IAM role.
+
+Now I have created my first notebook in SageMaker for this lesson. I will try to update this journal after the fact since there is going to be billing in SageMaker. What's important right now is I get through creating the models and practice how to use the SageMaker API. Right now I am working on the mini-project.
+
+### Main Components of SageMaker model
+
+In the context of SageMaker the model has 2 important components. First is the **container that holds the model inference functionality**. This is going to be the same container as the training job for simple models or a separate container for complex models. The role of the container is basically to hold the model architecture, for example XGBOOST or a custom deep Neural Network. The second component would be the **model artifacts**. This would be supporting the first component by providing the data that was created during the training process. This could be the weights for Neural Networks or the coefficients for a linear model. I think its the same as model `param` in PyTorch.
+
+### Fitting Models
+
+Once the training job has been initialized in SageMaker for a model it can then proceed with fitting. The idea is that the model will start to learn the weights or coefficients for the artefacts. First, the compute instance is started which is similar to a session with our hyperparameters in place. Second, the code in the form of a container that is going to fit the model is loaded and executed (xgboost, linear regression, NN). While the training is happening the compute session is given access to the S3 service for access to the train and validation data. Once the compute instance has completed in fitting the model with the hyperparameters we have set, the resulting model's artifacts would then get saved in S3 for future use (the weights are saved).
+
+Moving now to **Deploying a Model in SageMaker**. In the last topic we simply covered creating the model (development) for our machine learning project. We made use of the Boston Housing Prices and made a model that can predict the median housing price for a given feature. Now the objective for this topic is to actually connect that model to an endpoint so that we can deploy it.
