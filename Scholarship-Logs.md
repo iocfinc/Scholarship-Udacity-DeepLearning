@@ -611,3 +611,19 @@ In the context of SageMaker the model has 2 important components. First is the *
 Once the training job has been initialized in SageMaker for a model it can then proceed with fitting. The idea is that the model will start to learn the weights or coefficients for the artefacts. First, the compute instance is started which is similar to a session with our hyperparameters in place. Second, the code in the form of a container that is going to fit the model is loaded and executed (xgboost, linear regression, NN). While the training is happening the compute session is given access to the S3 service for access to the train and validation data. Once the compute instance has completed in fitting the model with the hyperparameters we have set, the resulting model's artifacts would then get saved in S3 for future use (the weights are saved).
 
 Moving now to **Deploying a Model in SageMaker**. In the last topic we simply covered creating the model (development) for our machine learning project. We made use of the Boston Housing Prices and made a model that can predict the median housing price for a given feature. Now the objective for this topic is to actually connect that model to an endpoint so that we can deploy it.
+
+## Day 40 March 10,2019
+
+OBJECTIVES FOR THIS WEEK (33-40):
+
+* [x] :gem: Finish *Introduction to Deployment*
+* [x] :gem: Finish *Building a Model with Sagemaker*
+* [ ] :gem: Proceed to *Deploying and Building a Model*
+* [ ] :gem: Follow that with *Hyperparameter Tuning*
+* [ ] :gem: Lastly *Updating a model*
+* [ ] :bomb: All leading up to **Deploying a Sentiment Analysis Model** - CAPSTONE :bomb: :dart: :gem:
+* [ ] :gem: Update experiences and projects in LinkedIn Pages.
+
+Its going to be pushed back :sob:. Its 3:40 AM today and I am here still doing someone else's work :joy:. Anyway, the action item for today would be to complete the mini-project on Sentiment Analysis for Building a Model with Sagemaker. Exploring the Amazon Sagemaker Dashboard and the model that was created last March 7. Its a nice thing to have a dashboard. You can have a dashboard for your model. You can show metrics like CPU and Memory Utilization. You can explore logs for errors and debugging. You can setup alerts on the different metrics in AWS. Billing alerts and budgets are also visible. We can setup alerts when the current budget is forecasted to breach. All important services.
+
+Now on to the mini-project. My job right now is to create steps 1 and 2 of the Machine Learning workflow, namely loading up the data and creating the training job for the model.
