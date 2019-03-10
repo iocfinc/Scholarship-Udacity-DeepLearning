@@ -708,7 +708,7 @@ xgb.set_hyperparameters(
         silent = 0,  # Silent set to false so running messages will be printed.
         objective = 'binary:logistic', # Specification of the learning task and learning objective. In this case its regression, linear
         early_stopping_rounds = 10,  # Stops when there is no improvement after n rounds
-        num_roud = 500  # number of rounds on the training, episodes
+        num_round = 500  # number of rounds on the training, episodes
 )
 
 ```
@@ -724,7 +724,15 @@ s3_input_validation = sagemaker.s3_input(s3_data=val_location, content_type='csv
 xgb.fit({'train': s3_input_train, 'validation': s3_input_validation})
 ```
 
-Once the model is trained we can proceed with the testing of our model with the test data set to check for accuracy.
+Encountered an error during the first 2 runs: `CustomerValueError: Require input for parameter num_round`. Turns out my parameter name was `num_roud` instead of `num_round`. Since this is to be explicitly said, the training job failed. One thing to note here in the error message, for future reference. The error tag was `CustomerValueError`. This already points to the cause of the error which is a Customer value so it must be something I plugged in. Could be useful for future cases.
+
+```python
+# NOTE: For reference, the XGBoost in this mini-project took 167 seconds. But ml.m4.xlarge is still part of the free tier I guess so its all good.
+2019-03-10 15:00:01 Completed - Training job completed
+Billable seconds: 167
+```
+
+Once the model was trained we can proceed with the testing of our model with the test data set to check for accuracy.
 
 ```python
 # TODO: Create a transformer object from the trained model. Using an instance count of 1 and an instance type of ml.m4.xlarge
@@ -736,10 +744,11 @@ xgb_transformer = xgb.transformer(  # Calling the batch transformer
 
 # Starting the transform job
 # TODO: Start the transform job. Make sure to specify the content type and the split type of the test data.
-xgb_transformer.transform_set(
+xgb_transformer.transform(
         test_location, # Point to the S3 bucket for test we have defined earlier
         content_type = 'text/csv', # Define the contents type of our input test file
         split_type = 'Line' # Define the separator
 ) # Call the transform set with the defined transformer
-
 ```
+
+We have to take note that the transformer job is going to run in the background. To know if the transformer job is completed we have to run `xgb_transformer.wait()`. This way we get a feedback on the status of the job.
