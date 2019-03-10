@@ -712,3 +712,34 @@ xgb.set_hyperparameters(
 )
 
 ```
+
+Since we have declared out model and the training hyperparameters, we can now proceed with fitting our model to the data.
+
+```python
+# Define the location of the s3 buckets for training and validation set
+s3_input_train = sagemaker.s3_input(s3_data=train_location, content_type='csv')
+s3_input_validation = sagemaker.s3_input(s3_data=val_location, content_type='csv')
+
+# call the fit function to start the training
+xgb.fit({'train': s3_input_train, 'validation': s3_input_validation})
+```
+
+Once the model is trained we can proceed with the testing of our model with the test data set to check for accuracy.
+
+```python
+# TODO: Create a transformer object from the trained model. Using an instance count of 1 and an instance type of ml.m4.xlarge
+#       should be more than enough.
+xgb_transformer = xgb.transformer(  # Calling the batch transformer
+        instance_count = 1, # Number of instances for transforming
+        instance_type = 'ml.m4.xlarge' # Instance type is again ml.m4.xlarge
+)
+
+# Starting the transform job
+# TODO: Start the transform job. Make sure to specify the content type and the split type of the test data.
+xgb_transformer.transform_set(
+        test_location, # Point to the S3 bucket for test we have defined earlier
+        content_type = 'text/csv', # Define the contents type of our input test file
+        split_type = 'Line' # Define the separator
+) # Call the transform set with the defined transformer
+
+```
