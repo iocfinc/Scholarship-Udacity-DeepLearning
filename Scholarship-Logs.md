@@ -626,4 +626,89 @@ OBJECTIVES FOR THIS WEEK (33-40):
 
 Its going to be pushed back :sob:. Its 3:40 AM today and I am here still doing someone else's work :joy:. Anyway, the action item for today would be to complete the mini-project on Sentiment Analysis for Building a Model with Sagemaker. Exploring the Amazon Sagemaker Dashboard and the model that was created last March 7. Its a nice thing to have a dashboard. You can have a dashboard for your model. You can show metrics like CPU and Memory Utilization. You can explore logs for errors and debugging. You can setup alerts on the different metrics in AWS. Billing alerts and budgets are also visible. We can setup alerts when the current budget is forecasted to breach. All important services.
 
-Now on to the mini-project. My job right now is to create steps 1 and 2 of the Machine Learning workflow, namely loading up the data and creating the training job for the model.
+Now on to the mini-project. My job right now is to create steps 1 and 2 of the Machine Learning workflow, namely loading up the data and creating the training job for the model. I have started running my `pre_processing` step but its taking a while. I don't know if it is stuck. Its pre-made code so I have no idea how to debug it and I don't see any mentions of the issue in the Slack channel. While waiting I have started on the TODO tasks.
+
+```python
+# Split the data from train to train and val
+train_X = pd.DataFrame(train_X[:15000]) # First 15000 entries for training
+train_y = pd.DataFrame(train_y[:15000])
+val_X = pd.DataFrame(train_X[15000:]) # From 15000 forwards
+val_y = pd.DataFrame(train_y[15000:])
+```
+
+Then the next step here would be to prepare the data for loading into S3. To note here is that **it is assumed that the first entry of each row would be the target**. Also ***there should be no index or header in the csv file as Amazon already accounted for it in the algorithm**.
+
+```python
+# create the Test set, no concatenation
+pd.DataFrame(test_X).to_csv(os.path.join(data_dir,'test.csv'), header = False, index = False)
+# Conactenate validation traget and features as well as training target and features
+pd.concat([val_y,val_X],axis=1).to_csv(os.path.join(data_dir,'validation.csv'), header = False, index = False)
+pd.concat([train_y,train_X],axis = 1).to_csv(os.path.join(data_dir,'train.csv'), header = False, index = False)
+# Reset the memory by making all previous dataframe holders as None
+test_X = train_X = val_X = train_y = val_y = None
+```
+
+Now that I have the csv files for the data I can prepare it now for upload to S3 bucket of the notebook for loading later by the Training Job.
+
+```python
+import sagemaker
+
+session = sagemaker.Session() # Initialize and store the current session
+
+# Declaring the S3 prefix to use
+prefix = 'sentiment-xgboost'
+
+# TODO: Upload the test.csv, train.csv and validation.csv files which are contained in data_dir to S3 using sess.upload_data().
+test_location = session.upload_data(os.path.join(data_dir, 'test.csv'), key_prefix = prefix)
+val_location = session.upload_data(os.path.join(data_dir,'validation.csv'), key_prefix = prefix)
+train_location = session.upload_data(os.path.join(data_dir, 'train.csv'), key_prefix = prefix)
+```
+
+After uploading to the S3 bucket, I can now proceed with creating and defining my model which is going to be XGBoost that is already available in SageMaker.
+
+```python
+from sagemaker import get_execution_role
+
+# Our current execution role is require when creating the model as the training
+# and inference code will need to access the model artifacts.
+role = get_execution_role()
+
+# We need to retrieve the location of the container which is provided by Amazon for using XGBoost.
+# As a matter of convenience, the training and inference code both use the same container.
+from sagemaker.amazon.amazon_estimator import get_image_uri
+
+container = get_image_uri(session.boto_region_name, 'xgboost')
+
+# TODO: Create a SageMaker estimator using the container location determined in the previous cell.
+#       It is recommended that you use a single training instance of type ml.m4.xlarge. It is also
+#       recommended that you use 's3://{}/{}/output'.format(session.default_bucket(), prefix) as the
+#       output path.
+
+xgb = None
+
+# TODO: Set the XGBoost hyperparameters in the xgb object. Don't forget that in this case we have a binary
+#       label so we should be using the 'binary:logistic' objective.
+xgb = sagemaker.estimator.Estimator(
+        container, # This is going to be the name of the training container
+        role,  # The IAM role to use
+        train_instance_count = 1, # Number of instances for training
+        training_instance_type = 'ml.m4.xlarge', # The instance type to be used for training
+        output_path = 's3://{}/{}/output'.format(session.default_bucket(),prefix) # save location for the training output
+        sagemaker_session = session
+)
+
+# Setting the XGBoost Hyperparameters
+
+xgb.set_hyperparameters(
+        max_depth = 5,
+        eta = 0.2, # Step size for shrinkage to prevent overfitting.
+        gamma = 4,  # Minimum loss reduction required to make a partition on a leaf node of the tree.
+        min_child_weight = 6,  # For linear regression this is corresponding to the minimum instances on each node.
+        subsample = 0.8  # Subsampling ratio on training instance.
+        silent = 0,  # Silent set to false so running messages will be printed.
+        objective = 'binary:logistic', # Specification of the learning task and learning objective. In this case its regression, linear
+        early_stopping_rounds = 10,  # Stops when there is no improvement after n rounds
+        num_roud = 500  # number of rounds on the training, episodes
+)
+
+```
