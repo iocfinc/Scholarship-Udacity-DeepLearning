@@ -795,3 +795,105 @@ Y_pred = xgb_predictor.predict(X_test.values).decode('utf-8')
 # as a numpy array.
 Y_pred = np.fromstring(Y_pred, sep=',')
 ```
+
+Once `Y_pred` has been called the endpoint is automatically involved (behind the scenes). The retuned value would then be a string of CSV. Once we receive it back we can then format it in such a way that it makes it easier to plot and understand. With that we have just finished the deployment of a model in SageMaker using High-level API. We can now proceed with deployment but in a low-level API. This is good when we require more flexibility in the execution. The list below simply describes the workflow we have for any machine learning project (AWS SageMaker). It would not matter if it was a high-level or low-level execution, the flow would still be the same.
+
+* Download or otherwise retrieve the data.
+* Process / Prepare the data.
+* Upload the processed data to S3.
+* Train a chosen model.
+* Test the trained model (typically using a batch transform job).
+* Deploy the trained model.
+* Use the deployed model.
+
+Below is an example of a low-level implementation. The training parameters are stored in a dictionary form.
+
+```python
+# We define the container for the training run.
+container = get_image_uri(session.boto_region_name, 'xgboost')
+
+# We now specify the parameters we wish to use for our training job
+training_params = {}
+
+# We need to specify the permissions that this training job will have. For our purposes we can use
+# the same permissions that our current SageMaker session has.
+training_params['RoleArn'] = role
+
+# Here we describe the algorithm we wish to use. The most important part is the container which
+# contains the training code.
+training_params['AlgorithmSpecification'] = {
+    "TrainingImage": container,
+    "TrainingInputMode": "File"
+}
+
+# We also need to say where we would like the resulting model artifacts stored.
+# Note that its the same in format as the high-level implementation. Only difference is on how it is defined.
+training_params['OutputDataConfig'] = {
+    "S3OutputPath": "s3://" + session.default_bucket() + "/" + prefix + "/output"
+}
+
+# We also need to set some parameters for the training job itself. Namely we need to describe what sort of
+# compute instance we wish to use along with a stopping condition to handle the case that there is
+# some sort of error and the training script doesn't terminate.
+training_params['ResourceConfig'] = {
+    "InstanceCount": 1,
+    "InstanceType": "ml.m4.xlarge",
+    "VolumeSizeInGB": 5  # NOTE: 5GB is default and is Free
+}
+    
+training_params['StoppingCondition'] = {
+    "MaxRuntimeInSeconds": 86400  # State the timeout condition to prevent long loops.
+}
+
+# Next we set the algorithm specific hyperparameters. You may wish to change these to see what effect
+# there is on the resulting model.
+training_params['HyperParameters'] = {
+    "max_depth": "5",
+    "eta": "0.2",
+    "gamma": "4",
+    "min_child_weight": "6",
+    "subsample": "0.8",
+    "objective": "reg:linear",
+    "early_stopping_rounds": "10",
+    "num_round": "200"
+}
+
+# Now we need to tell SageMaker where the data should be retrieved from.
+training_params['InputDataConfig'] = [
+    {
+        "ChannelName": "train",
+        "DataSource": {
+            "S3DataSource": {
+                "S3DataType": "S3Prefix",
+                "S3Uri": train_location,
+                "S3DataDistributionType": "FullyReplicated"
+            }
+        },
+        "ContentType": "csv",
+        "CompressionType": "None"
+    },
+    {
+        "ChannelName": "validation",
+        "DataSource": {
+            "S3DataSource": {
+                "S3DataType": "S3Prefix",
+                "S3Uri": val_location,
+                "S3DataDistributionType": "FullyReplicated"
+            }
+        },
+        "ContentType": "csv",
+        "CompressionType": "None"
+    }
+]
+```
+
+Same as in high-level implementation, completing the entries for the configuration and hyperparameters of the training model would then lead to the actual running of the training job which would result in the creation of the artefacts and weights for the model. The output is actually stored in S3 as a `.tar.gz` file.
+
+```python
+training_job_info = session.sagemaker_client.describe_training_job(TrainingJobName=training_job_name)
+
+model_artifacts = training_job_info['ModelArtifacts']['S3ModelArtifacts']
+
+# NOTE: Result:
+'s3://sagemaker-ap-southeast-1-573215985734/boston-xgboost-deploy-ll/output/boston-xgboost-2019-03-10-19-07-18/output/model.tar.gz'
+```
