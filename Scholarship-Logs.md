@@ -751,4 +751,47 @@ xgb_transformer.transform(
 ) # Call the transform set with the defined transformer
 ```
 
-We have to take note that the transformer job is going to run in the background. To know if the transformer job is completed we have to run `xgb_transformer.wait()`. This way we get a feedback on the status of the job.
+We have to take note that the transformer job is going to run in the background. To know if the transformer job is completed we have to run `xgb_transformer.wait()`. This way we get a feedback on the status of the job. For our current use case, local predictions, we have to copy the transformer values from the S3 bucket to our local notebook directory. This is done via `!aws s3 cp --recursive $xgb_transformer.output_path $data_dir`. Note that .out looks like .pth for PyTorch. The transformer applied the test data to the model to get the resultant values. From there we load the csv file and then squeeze the values to get a simple 1 or 0 representation that we can then compare to the target values of `test_y`.
+
+```python
+from sklearn.metrics import accuracy_score
+accuracy_score(test_y, predictions)
+
+# NOTE: Ouput is 85% accuracy.
+0.85008
+```
+
+Now that we have tested our model we know that it has a good accuracy of 85% for predicting sentiment. That is all for the High-level mini-project for AWS SageMaker. Here we were able to create and test a model based on the high-level functions of SageMaker. Up next would be 
+
+## Day 41 March 11,2019
+
+I am still on standby this morning so might as well work on this while waiting. Now the task is to start deploying (high level) the model we have created in SageMaker. Recalling that a deployed model requires an endpoint. SageMaker can handle most of the work in this area. As long as we have created the instance for the endpoint and have described the expected format of input it can already start using the model.
+
+For the tutorial we are again going to make use of the Boston Housing prices dataset. This time instead of using the batch transform (transformer) we are instead going to create an instance for the deployed machine to run (container). I have copied the code below on what the high-level version of a model deployed would look like. Instead of `xgb.tranformer()` we are going to create a `predictor` via `xgb.deploy()`. Similar to creating a batch transformer container, we are also going to need a container for the predictor model and therefore we have to define the instance type which in this case is still one `ml.m4.xlarge` instance.
+
+```python
+# NOTE: Instead of a transformer we use deploy
+xgb_predictor = xgb.deploy(initial_instance_count=1, instance_type='ml.m4.xlarge')
+```
+
+Creating a predictor above does two things: One is that it creates the container for the model to run in when requested and the second is that an endpoint is also initialized together with the model. We have to also recall that for AWS, the billing is based on the uptime of our endpoint. In our case, I think this is still covered by the AWS Free tier. For bigger projects like multiple redundant endpoints to cater to multiple requests, this could be
+
+```python
+INFO:sagemaker:Creating model with name: xgboost-2019-03-10-18-39-29-249
+INFO:sagemaker:Creating endpoint with name xgboost-2019-03-10-18-36-17-030
+
+```
+
+Recall that the purpose of the endpoint is to manage the communication to and from the model. This is why we have to also define what format of data should the endpoint be expecting. For this case its going to be a `text/csv` type with a `csv_serializer`. To manage the output, the endpoint should also be told how the predicted values come out.
+
+```python
+from sagemaker.predictor import csv_serializer
+# We need to tell the endpoint what format the data we are sending is in
+xgb_predictor.content_type = 'text/csv'
+xgb_predictor.serializer = csv_serializer
+
+Y_pred = xgb_predictor.predict(X_test.values).decode('utf-8')
+# predictions is currently a comma delimited string and so we would like to break it up
+# as a numpy array.
+Y_pred = np.fromstring(Y_pred, sep=',')
+```
