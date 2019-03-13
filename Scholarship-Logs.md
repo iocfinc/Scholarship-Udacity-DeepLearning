@@ -897,3 +897,37 @@ model_artifacts = training_job_info['ModelArtifacts']['S3ModelArtifacts']
 # NOTE: Result:
 's3://sagemaker-ap-southeast-1-573215985734/boston-xgboost-deploy-ll/output/boston-xgboost-2019-03-10-19-07-18/output/model.tar.gz'
 ```
+
+## Day 43 March 13,2019
+
+OBJECTIVES FOR THIS WEEK (33-40): Continued
+
+* [x] :gem: Finish *Introduction to Deployment*
+* [x] :gem: Finish *Building a Model with Sagemaker*
+* [ ] :gem: Proceed to *Deploying and Building a Model*
+* [ ] :gem: Follow that with *Hyperparameter Tuning*
+* [ ] :gem: Lastly *Updating a model*
+* [ ] :bomb: All leading up to **Deploying a Sentiment Analysis Model** - CAPSTONE :bomb: :dart: :gem:
+* [ ] :gem: Update experiences and projects in LinkedIn Pages.
+
+I know I am delayed in my objectives. I did not think it would be this difficult to run through the lesson. But taking it slow but consistent this time. Progress. Right now I am finishing up on the Deploying and Building a Model portion. Previously we have been training our XGBoost model SageMaker and we have tested the endpoint during our last session (both high and low-level approach). This time we are going to connect it to a web app.
+
+![Udacity - AWS Webapp>model flow](https://s3.amazonaws.com/video.udacity-data.com/topher/2018/November/5be4a7b2_web-app/web-app.svg)
+
+The structure above is designed to solve two issues that has to be overcome before being able to deploy the model. First is the issue with security, for AWS we have to setup the correct rights so that one application can access our endpoint. Another issue is the data processing wherein we have to set first how the data is going to move to and from our endpoint. API Gateway will allow us to be able to communicate with the endpoint without having to setup rights (for the sake of this tutorial only). Lambda will be handling the conversion of the data from the web app to a format that is accepted by the endpoint.
+
+* 1. Web application will receive the review from the user.
+* 2. Web application to send the review back to an endpoint created using API Gateway. The purpose of this endpoint is so that anyone including the web app can use it.
+* 3. The API Gateway will then forward the received review to the Lambda function.
+* 4. The Lambda function will tokenize the user's review and create a bag of words encoding for the result. This will then be used by our model.
+* 5. Our model would then perform inference to the received review. The resulting sentiment is then sent back to the Lambda function.
+* 6. The Lambda function will forward the sentiment back to our web app via the API Gateway.
+
+![Udacity - Webapp flowchart](https://s3.amazonaws.com/video.udacity-data.com/topher/2018/November/5c005450_model-app-endpoint/model-app-endpoint.png)
+
+So how do we go about this. Since we pay for the endpoint based on uptime then we have to restart training and invoking the endpoint we did last time. We have to kill it to save costs. The workflow is still the same from the data load to the model deployment via `.deploy()` method.
+
+```python
+# TODO: First we invoke the predictor instance by .deploy() method. Take note that our predictor is using ml.m4.xlarge.
+xgb_predictor = xgb.deploy(initial_instance_count = 1, instance_type = 'ml.m4.xlarge')
+```
