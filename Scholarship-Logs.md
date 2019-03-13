@@ -928,6 +928,38 @@ The structure above is designed to solve two issues that has to be overcome befo
 So how do we go about this. Since we pay for the endpoint based on uptime then we have to restart training and invoking the endpoint we did last time. We have to kill it to save costs. The workflow is still the same from the data load to the model deployment via `.deploy()` method.
 
 ```python
-# TODO: First we invoke the predictor instance by .deploy() method. Take note that our predictor is using ml.m4.xlarge.
+# NOTE: First we invoke the predictor instance by .deploy() method. Take note that our predictor is using ml.m4.xlarge.
 xgb_predictor = xgb.deploy(initial_instance_count = 1, instance_type = 'ml.m4.xlarge')
+```
+
+Once our instance has been created we then tell the endpoint the type of data we are going to be sending it so that it knows what it has to accept. For XGBoost our input can be csv file/text. To help with the processing we also import `csv_serializer`. Additional formats can be found on [this documentation](https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html) from AWS SageMaker.
+
+```python
+# NOTE: We import csv_serializer and tell our endpoint to expect text/csv content and use csv_serializer (for the output)
+from sagemaker.predictor import csv_serializer
+
+xgb_predictor.content_type = 'text/csv'
+xgb_predictor.serializer = csv_serializer
+```
+
+Once we have the instance for the predictor setup we can then send an inference to our endpoint as *Body* and get a response back.
+
+```python
+# NOTE: This is sort of the request that our endpoint is going to receive.
+response = runtime.invoke_endpoint(EndpointName = xgb_predictor.endpoint,   # The name of the endpoint we created
+    ContentType = 'text/csv',                     # The data format that is expected
+    Body = ','.join([str(val) for val in test_bow]).encode('utf-8'))
+```
+
+Once the inference has been done our endpoint would send out the response and this would include the *Body*. The Body would contain the information we would want so we can use that to print out our result. Again the Body is going to carry the payload while the rest would be headers. We can print out the whole response to see the entire message to our request or to our response.
+
+```python
+response = response['Body'].read().decode('utf-8')
+print(response)
+```
+
+Again, since we are billed for up-time of our endpoint we have to be sure to shut it down once we have completed the deployment and inference.
+
+```python
+xgb_predictor.delete_endpoint()
 ```
