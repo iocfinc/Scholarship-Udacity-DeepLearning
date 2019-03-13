@@ -966,6 +966,10 @@ xgb_predictor.delete_endpoint()
 
 Next we go over how we are going to create a Lambda function. In Python Lambda function is a small anonymous function. These were created when we are going to use a small argument but it only has one expression to it. In AWS, Lambda is an example of **function as a service**. We have to recall that in order to run functions like `.py` files we have to house it in a server and that server would not be free. AWS has Lambda to cater to simple functions that we only pay when we use and not for the entire up-time of the instance. Lambda will perform actions (script) as a response to a trigger. The advantage of Lamda function is that we are charged on an execution basis but the downside is that it can only contain a short code. In our case we are going to use Lambda to be the function that will convert the entry from the API Gateway to the format that was setup in the instance of our predictor which was text/csv.
 
+### Setting up a Lambda function
+
+We need to first have an **IAM** role created. We need to create this as we need to set the permissions for our Lambda function to interact with AWS SageMaker and our endpoint. Once we have setup the permissions for our Lambda **IAM** role we can proceed with creating the actual function inside our Lambda. The idea behind our Lambda function is that first it has to format our review data from the web app, then it will create a Bag of Words encoding for our review data, finally it will format the BOW encoded vocabulary to something that can connect with our endpoint (i.e. convert it to text/csv) and also process the response by rounding our the result (0 or 1).
+
 ```python
 # NOTE: Lambda function for our app from Udacity
 
@@ -1020,3 +1024,5 @@ def lambda_handler(event, context):
     }
 
 ```
+
+Next would be to create the API Gateway that will allow our web app to access our model. This would be the back-end of the web app we are going to make. Once we click the button on our page it should send the reviews we have entered on our field to the API Gateway which will then send a Post request that will automatically get forwarded to Lambda for processing and eventually it would reach our endpoint for our model which will do the inference which we will receive as the response. What the API Gateway for this current example would be to the trigger to our Lambda function which is directed to our endpoint. API Gateway is so much powerful than this but for the sake of completing our project I think this should suffice.
