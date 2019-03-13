@@ -904,7 +904,7 @@ OBJECTIVES FOR THIS WEEK (33-40): Continued
 
 * [x] :gem: Finish *Introduction to Deployment*
 * [x] :gem: Finish *Building a Model with Sagemaker*
-* [ ] :gem: Proceed to *Deploying and Building a Model*
+* [x] :gem: Proceed to *Deploying and Building a Model*
 * [ ] :gem: Follow that with *Hyperparameter Tuning*
 * [ ] :gem: Lastly *Updating a model*
 * [ ] :bomb: All leading up to **Deploying a Sentiment Analysis Model** - CAPSTONE :bomb: :dart: :gem:
@@ -1025,4 +1025,14 @@ def lambda_handler(event, context):
 
 ```
 
+### Creating the API Gateway
+
 Next would be to create the API Gateway that will allow our web app to access our model. This would be the back-end of the web app we are going to make. Once we click the button on our page it should send the reviews we have entered on our field to the API Gateway which will then send a Post request that will automatically get forwarded to Lambda for processing and eventually it would reach our endpoint for our model which will do the inference which we will receive as the response. What the API Gateway for this current example would be to the trigger to our Lambda function which is directed to our endpoint. API Gateway is so much powerful than this but for the sake of completing our project I think this should suffice.
+
+### Connecting the API to the HTML file
+
+Now that we have created our API gateway, our Lambda Function, our endpoint for the model all that is left is to create the web application. For this example, Udacity has already provided us with a simple web application that will take in an input review and respond with the sentiment of that review. If we created all the other portions correctly, we should be able to send a sentiment that we have and receive a response of the sentiment of that review which is either positive or negative.
+
+Again, the web app is going to be for sample purposes only so the number of requests and response we are going to have is going to be, hopefully, within the Free Tier of AWS. What we have to be careful of is the use of our backend services especially the endpoint for the model. We have to remember that endpoints are charged by the up-time regardless of use so it would be costly to keep the instance running. Again we have to delete our endpoint as part of the cleanup. Also we have to, although not that important, to delete our Lambda function and API Gateway instance as well. Lambda function and API gateway instance are charged on a per execution basis either per post/response or per trigger. While the endpoint will not be reachable, since it was deleted, it would still be possible to max out the execution simply by clicking on the button on the web app since the API gateway would still be accessible.
+
+With that our **Deploying and Using a Model** lesson is complete. New objective reached.
