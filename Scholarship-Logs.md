@@ -1039,8 +1039,18 @@ OBJECTIVES FOR THIS WEEK (33-40): Continued
 * [ ] :bomb: All leading up to **Deploying a Sentiment Analysis Model** - CAPSTONE :bomb: :dart: :gem:
 * [ ] :gem: Update experiences and projects in LinkedIn Pages.
 
-Lambda Function - IMDB_WebApp_Endpoint_Bridge
-Lambda Role - @LambdaExecute
-API invoke post -  https://4tpskgia1g.execute-api.ap-southeast-1.amazonaws.com/TEST
-
 Today is review day. Mostly checking my understanding of creating the connection between the Web App to the endpoint. There will be some deployment today to test.
+
+So most checking was done today. The web application was very basic. It simply outputs the inference from the endpoint. But it does fail on some tests. For example, shutting down the endpoint should return an error. In Lambda, testing the function while there is no backend results in an error message below. But this does not reach the Web Application. The web app instead displays Positive which makes sense since it was coded that way. Overall this was a really fun experiment. To know that I can now deploy projects in ML for showcase makes it a great experience. Possible improvement for me would be to learn how to run models that are custom made. Meaning deep NN models. XGBoost was already available and wrapped for us. Custom NNs would be an amazing experiment to conduct. Also the use of Django or Flask for deployment would be amazing.
+
+```python
+"errorMessage": "An error occurred (ValidationError) when calling the InvokeEndpoint operation: Endpoint xgboost-2019-03-14-09-33-17-191 of account 573215985734 not found."
+```
+
+So I was going over some of the tabs in API Gateway and I stumbled upon Canary. **Canary is used to test new API deployments and/or changes to stage variables**. Its a call back to the time when canaries were used by miners to detect dangerous gas in a mine. In this setting Canary is used to test out deployments of API before releasing it to production. Ensuring that all variables are tested and conforms to the correct output.
+
+I have not yet deleted the API. It should be fairly easy to delete, its in the actions tab of the API gateway. The API is accessible but I don't think that I posted the URL publicly for it to be visible to others which could potentially use up my request limit.
+
+Then I went to check up on the Lambda function which I am thinking of as a bridge. There are multiple resources that the Lambda function can access and control provided that the function's role is setup correctly. It can automate file transfers or it can be used to login/security for access management. It can connect to Amazon S3 for requests, it can be connected to the SageMaker resource for inference. We can even connect it to an EC2 resource, AWS CloudWatch(logs), another Lambda, RoboMaker and so much more.
+
+To trigger the Lambda, there are also multiple ways. For example it can be through the API Gateway like we did. It can be from a device via IoT service, it can be used to automate events response via CloudWatch, for example automating the downtime response. It can receive triggers from the Load Balancer to automatically switch and manage the connections during extreme events or heavy traffic. A lot of use cases and we are just scratching the surface by using it as a serializer. So much more potential here. The sense of enablement we get from AWS is really amazing.
