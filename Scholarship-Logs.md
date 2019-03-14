@@ -900,16 +900,6 @@ model_artifacts = training_job_info['ModelArtifacts']['S3ModelArtifacts']
 
 ## Day 43 March 13,2019
 
-OBJECTIVES FOR THIS WEEK (33-40): Continued
-
-* [x] :gem: Finish *Introduction to Deployment*
-* [x] :gem: Finish *Building a Model with Sagemaker*
-* [x] :gem: Proceed to *Deploying and Building a Model*
-* [ ] :gem: Follow that with *Hyperparameter Tuning*
-* [ ] :gem: Lastly *Updating a model*
-* [ ] :bomb: All leading up to **Deploying a Sentiment Analysis Model** - CAPSTONE :bomb: :dart: :gem:
-* [ ] :gem: Update experiences and projects in LinkedIn Pages.
-
 I know I am delayed in my objectives. I did not think it would be this difficult to run through the lesson. But taking it slow but consistent this time. Progress. Right now I am finishing up on the Deploying and Building a Model portion. Previously we have been training our XGBoost model SageMaker and we have tested the endpoint during our last session (both high and low-level approach). This time we are going to connect it to a web app.
 
 ![Udacity - AWS Webapp>model flow](https://s3.amazonaws.com/video.udacity-data.com/topher/2018/November/5be4a7b2_web-app/web-app.svg)
@@ -1036,3 +1026,21 @@ Now that we have created our API gateway, our Lambda Function, our endpoint for 
 Again, the web app is going to be for sample purposes only so the number of requests and response we are going to have is going to be, hopefully, within the Free Tier of AWS. What we have to be careful of is the use of our backend services especially the endpoint for the model. We have to remember that endpoints are charged by the up-time regardless of use so it would be costly to keep the instance running. Again we have to delete our endpoint as part of the cleanup. Also we have to, although not that important, to delete our Lambda function and API Gateway instance as well. Lambda function and API gateway instance are charged on a per execution basis either per post/response or per trigger. While the endpoint will not be reachable, since it was deleted, it would still be possible to max out the execution simply by clicking on the button on the web app since the API gateway would still be accessible.
 
 With that our **Deploying and Using a Model** lesson is complete. New objective reached.
+
+## Day 44 March 14,2019
+
+OBJECTIVES FOR THIS WEEK (33-40): Continued
+
+* [x] :gem: Finish *Introduction to Deployment*
+* [x] :gem: Finish *Building a Model with Sagemaker*
+* [x] :gem: Proceed to *Deploying and Building a Model*
+* [ ] :gem: Follow that with *Hyperparameter Tuning*
+* [ ] :gem: Lastly *Updating a model*
+* [ ] :bomb: All leading up to **Deploying a Sentiment Analysis Model** - CAPSTONE :bomb: :dart: :gem:
+* [ ] :gem: Update experiences and projects in LinkedIn Pages.
+
+Lambda Function - IMDB_WebApp_Endpoint_Bridge
+Lambda Role - @LambdaExecute
+API invoke post -  https://4tpskgia1g.execute-api.ap-southeast-1.amazonaws.com/TEST
+
+Today is review day. Mostly checking my understanding of creating the connection between the Web App to the endpoint. There will be some deployment today to test.
